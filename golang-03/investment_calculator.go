@@ -23,3 +23,7 @@ func main() {
 	fmt.Println("Future real value is", futureRealValue)
 
 }
+
+func outputText(text string, text2 string) {
+	fmt.Println(text, text2)
+}
