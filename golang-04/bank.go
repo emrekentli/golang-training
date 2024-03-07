@@ -28,7 +28,10 @@ func getBalanceFromFile() (float64, error) {
 
 func writeBalanceToFile(balance float64) {
 	balanceText := fmt.Sprint(balance)
-	os.WriteFile(accountBalanceFile, []byte(balanceText), 0644)
+	err := os.WriteFile(accountBalanceFile, []byte(balanceText), 0644)
+	if err != nil {
+		fmt.Println("Failed to write balance to file.")
+	}
 }
 
 func main() {
