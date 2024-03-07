@@ -5,8 +5,9 @@ import (
 	"math"
 )
 
+const inflationRate = 6.5
+
 func main() {
-	const inflationRate = 6.5
 	var investmentAmount float64
 	var years float64
 	var expectedReturnRate = 5.5
@@ -17,13 +18,15 @@ func main() {
 	fmt.Println("Enter number of years: ")
 	fmt.Scan(&years)
 
-	futureValue := investmentAmount * math.Pow(1+expectedReturnRate/100, years)
-	futureRealValue := futureValue / math.Pow(1+inflationRate/100, years)
+	futureValue, futureRealValue := calculateFutureValues(investmentAmount, expectedReturnRate, years)
+
 	fmt.Println("Future value is", futureValue)
 	fmt.Println("Future real value is", futureRealValue)
 
 }
 
-func outputText(text string, text2 string) {
-	fmt.Println(text, text2)
+func calculateFutureValues(investmentAmount, expectedReturnRate, years float64) (float64, float64) {
+	futureValue := investmentAmount * math.Pow(1+expectedReturnRate/100, years)
+	futureRealValue := futureValue / math.Pow(1+inflationRate/100, years)
+	return futureValue, futureRealValue
 }
