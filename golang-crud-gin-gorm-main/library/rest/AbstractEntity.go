@@ -5,7 +5,7 @@ import (
 )
 
 type AbstractEntity struct {
-	ID        string `gorm:"type:uuid;default:gen_random_uuid()"`
+	Id        string `gorm:"type:uuid;default:gen_random_uuid()"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

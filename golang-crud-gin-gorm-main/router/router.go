@@ -21,6 +21,9 @@ func NewRouter(tagsController *controller.TagsController) *gin.Engine {
 	baseRouter := router.Group("/api")
 	tagsRouter := baseRouter.Group("/tags")
 	tagsRouter.POST("", tagsController.Create)
-
+	tagsRouter.PUT("/:id", tagsController.Update)
+	tagsRouter.GET("/:id", tagsController.FindById)
+	tagsRouter.GET("", tagsController.FindAll)
+	tagsRouter.GET("/filter", tagsController.Filter)
 	return router
 }

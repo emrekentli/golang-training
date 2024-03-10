@@ -5,6 +5,6 @@ type BaseDataWrapper struct {
 }
 
 type DataResponse struct {
-	Data BaseDataWrapper `json:"data"`
-	Meta MetaResponse    `json:"meta"`
+	Data interface{}  `json:"data"`
+	Meta MetaResponse `json:"meta"`
 }

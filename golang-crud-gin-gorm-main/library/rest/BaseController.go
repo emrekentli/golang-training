@@ -4,16 +4,18 @@ import "github.com/go-playground/validator/v10"
 
 type BaseController struct{}
 
-func (c *BaseController) RespondPageResponse(items BasePageWrapper) PageResponseWrapper {
+func (c *BaseController) RespondPageResponse(paginationData interface{}) PageResponseWrapper {
 	return PageResponseWrapper{
-		Data: items,
+		Data: paginationData,
 		Meta: MetaResponseSuccess(),
 	}
 }
 
-func (c *BaseController) RespondDataResponse(items BaseDataWrapper) DataResponse {
+func (c *BaseController) RespondDataResponse(items interface{}) DataResponse {
 	return DataResponse{
-		Data: items,
+		Data: BaseDataWrapper{
+			Items: items,
+		},
 		Meta: MetaResponseSuccess(),
 	}
 }
