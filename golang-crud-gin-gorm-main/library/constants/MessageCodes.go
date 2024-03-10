@@ -1,4 +1,4 @@
-package rest
+package constants
 
 type MessageCode struct {
 	Code    string

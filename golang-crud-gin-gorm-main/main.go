@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/go-playground/validator/v10"
+	"github.com/rs/zerolog/log"
 	"golang-crud-gin/config"
 	"golang-crud-gin/controller"
 	_ "golang-crud-gin/docs"
@@ -10,9 +12,6 @@ import (
 	"golang-crud-gin/router"
 	"golang-crud-gin/service"
 	"net/http"
-
-	"github.com/go-playground/validator/v10"
-	"github.com/rs/zerolog/log"
 )
 
 func main() {
@@ -26,7 +25,6 @@ func main() {
 
 	// Repository
 	tagsRepository := repository.NewTagsRepositoryImpl(db)
-
 	// Service
 	tagsService := service.NewTagsServiceImpl(tagsRepository, validate)
 

@@ -1,14 +1,12 @@
 package service
 
 import (
+	"github.com/go-playground/validator/v10"
 	"golang-crud-gin/data/dto"
-	"golang-crud-gin/data/request"
-	MESSAGE_CODE "golang-crud-gin/library/enum"
+	"golang-crud-gin/library/constants"
 	"golang-crud-gin/library/rest"
 	"golang-crud-gin/model"
 	"golang-crud-gin/repository"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type TagsServiceImpl struct {
@@ -23,17 +21,20 @@ func NewTagsServiceImpl(tagRepository repository.TagsRepository, validate *valid
 	}
 }
 
-func (t *TagsServiceImpl) Create(tags *request.TagsRequest) (dto.TagsDto, rest.MetaResponse) {
+func (t *TagsServiceImpl) Create(tags *dto.TagsDto) (dto.TagsDto, rest.MetaResponse) {
+
 	if err := t.Validate.Struct(tags); err != nil {
-		return dto.TagsDto{}, rest.MetaResponseOf(MESSAGE_CODE.BAD_REQUEST.Code, err.Error())
+		var errMessage = rest.GenerateErrorMessage(&err)
+		return dto.TagsDto{}, rest.MetaResponseOf(constants.BAD_REQUEST.Code, errMessage)
 	}
 
 	tagModel := model.Tags{
 		Name: tags.Name,
 	}
+
 	var tagDto, saveError = t.TagsRepository.Save(&tagModel)
 	if saveError != nil {
-		return dto.TagsDto{}, rest.MetaResponseOf(MESSAGE_CODE.BAD_REQUEST.Code, saveError.Error())
+		return dto.TagsDto{}, rest.MetaResponseOf(constants.BAD_REQUEST.Code, saveError.Error())
 	}
 
 	return dto.TagsDto{

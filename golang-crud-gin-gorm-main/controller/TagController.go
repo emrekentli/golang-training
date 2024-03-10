@@ -4,13 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang-crud-gin/data/request"
 	"golang-crud-gin/helper"
-	messagecode "golang-crud-gin/library/enum"
 	"golang-crud-gin/library/rest"
 	"golang-crud-gin/service"
 	"net/http"
 )
 
 type TagsController struct {
+	rest.BaseController
 	tagsService service.TagsService
 }
 
@@ -21,23 +21,16 @@ func NewTagsController(service service.TagsService) *TagsController {
 }
 
 func (controller *TagsController) Create(ctx *gin.Context) {
-	createTagsRequest := request.TagsRequest{}
-	err := ctx.ShouldBindJSON(&createTagsRequest)
-	helper.ErrorPanic(err)
-	var webResponse rest.ApiResponse
-	var tagResponse, createError = controller.tagsService.Create(&createTagsRequest)
-	if createError.Code != messagecode.SUCCESS.Code {
-		webResponse = rest.ApiResponse{
-			Meta: rest.MetaResponseOf(createError.Code, createError.Description),
-		}
-		ctx.JSON(http.StatusBadRequest, webResponse)
-	} else {
-		ctx.JSON(http.StatusOK, webResponse)
-		webResponse = rest.ApiResponse{
-			Meta: rest.MetaResponseSuccess(),
-			Data: tagResponse,
-		}
-	}
-
 	ctx.Header("Content-Type", "application/json")
+	var createTagsRequest request.TagsRequest
+	if err := ctx.ShouldBindJSON(&createTagsRequest); err != nil {
+		ctx.JSON(http.StatusBadRequest, controller.RespondError(rest.MetaResponseOf("400", "Invalid request")))
+		return
+	}
+	tagResponse, createError := controller.tagsService.Create(createTagsRequest.ToDto())
+	if !helper.IsErrorCodeEqualsSuccess(createError.Code) {
+		ctx.JSON(http.StatusBadRequest, controller.RespondError(createError))
+		return
+	}
+	ctx.JSON(http.StatusOK, controller.Respond(tagResponse))
 }
